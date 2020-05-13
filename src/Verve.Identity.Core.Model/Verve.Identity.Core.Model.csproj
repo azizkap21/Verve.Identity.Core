@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0.1</Version>
+    <Authors>Verve Infotech</Authors>
+    <Company>Verve Infotech</Company>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>Public</RepositoryType>
+    <PackageTags>Identity, AspNetCoreIdentity, DbContext</PackageTags>
+    <Description>Custom Implementation of Microsoft AspNet Core Identity Models</Description>
+    <PackageReleaseNotes>Intial release</PackageReleaseNotes>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Response\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>1.0.0.1</version>
+    <title>Verve.Identity.Core.Service</title>
+    <authors>Verve IT</authors>
+    <owners>Verve IT</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>http://project_url_here_or_delete_this_line/</projectUrl>
+    <iconUrl>http://icon_url_here_or_delete_this_line/</iconUrl>
+    <description>Verve Identity Core Service</description>
+    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <copyright>Copyright 2020</copyright>
+    <tags>Identity</tags>
+	<dependencies>
+    <dependency id="Verve.Identity.Core.Context" version="1.0.0" include="contentFiles, build" />
+    <dependency id="Verve.Identity.Core.Model" version="1.0.0" include="contentFiles, build" />
+</dependencies>
+
+  </metadata>
+</package>
