@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.Service
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.Model", "Verve.Identity.Core.Model\Verve.Identity.Core.Model.csproj", "{0046B406-9774-4A78-A4D4-4C8120BD1CB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.IdentityDbContext", "Verve.Identity.Core.IdentityContext\Verve.Identity.Core.IdentityContext.csproj", "{66C2A0EE-936B-4036-8049-5CB3BA13B4CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.IdentityContext", "Verve.Identity.Core.IdentityContext\Verve.Identity.Core.IdentityContext.csproj", "{66C2A0EE-936B-4036-8049-5CB3BA13B4CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.Test.Web", "Verve.Identity.Core.Test.Web\Verve.Identity.Core.Test.Web.csproj", "{A3639C5F-F68B-4643-97AB-5BB847B6E105}"
 EndProject
@@ -16,6 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B7D93F0E-8849-4D76-AB65-8947288BB639}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.Test.Entity", "Verve.Identity.Core.Test.Entity\Verve.Identity.Core.Test.Entity.csproj", "{C54E67B8-2466-442B-A0F2-88C61A5E4CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verve.Identity.Core.Tests", "Verve.Identity.Core.Tests\Verve.Identity.Core.Tests.csproj", "{5D6E4ED4-A3EA-4877-A8F0-FF03E4BFF316}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{C54E67B8-2466-442B-A0F2-88C61A5E4CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C54E67B8-2466-442B-A0F2-88C61A5E4CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C54E67B8-2466-442B-A0F2-88C61A5E4CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D6E4ED4-A3EA-4877-A8F0-FF03E4BFF316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D6E4ED4-A3EA-4877-A8F0-FF03E4BFF316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D6E4ED4-A3EA-4877-A8F0-FF03E4BFF316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D6E4ED4-A3EA-4877-A8F0-FF03E4BFF316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{A3639C5F-F68B-4643-97AB-5BB847B6E105} = {B7D93F0E-8849-4D76-AB65-8947288BB639}
 		{49775FDC-899C-4AD6-A5F9-4B42E0D8E888} = {B7D93F0E-8849-4D76-AB65-8947288BB639}
 		{C54E67B8-2466-442B-A0F2-88C61A5E4CCE} = {B7D93F0E-8849-4D76-AB65-8947288BB639}
+		{5D6E4ED4-A3EA-4877-A8F0-FF03E4BFF316} = {B7D93F0E-8849-4D76-AB65-8947288BB639}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2DF9F92-A0CA-4FDB-AA1F-835260926914}

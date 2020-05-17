@@ -11,5 +11,8 @@ namespace Verve.Identity.Core.Test.Web.Response
 
         public string PhoneNo { get; set; }
 
+        public bool Success { get; set; } = false;
+
+        public string ErrorMessage { get; set; }
     }
 }

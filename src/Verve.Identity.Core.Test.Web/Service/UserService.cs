@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Verve.Identity.Core.Model;
-using Verve.Identity.Core.Service;
+
 using Verve.Identity.Core.Service.Abstraction;
 using Verve.Identity.Core.Service.Configuration;
 using Verve.Identity.Core.Test.Entity;
@@ -18,13 +18,13 @@ using Verve.Identity.Core.Test.Web.Response;
 
 namespace Verve.Identity.Core.Test.Web.Service
 {
-   
+
 
     public class UserService : IUserService
     {
         private readonly IVerveIdentityService<UserAccount> _identityService;
 
-        private readonly UserManager<UserAccount> _usernaManager;
+        private readonly UserManager<UserAccount> _userManager;
         private readonly SignInManager<UserAccount> _signInManager;
         private readonly IdentitySettings _identitySettings;
         public UserService(IVerveIdentityService<UserAccount> identityService,
@@ -33,7 +33,7 @@ namespace Verve.Identity.Core.Test.Web.Service
             IOptionsMonitor<IdentitySettings> identityOptions)
         {
             _identityService = identityService;
-            _usernaManager = userManager;
+            _userManager = userManager;
             _signInManager = signInManager;
             _identitySettings = identityOptions.CurrentValue;
         }
@@ -57,11 +57,14 @@ namespace Verve.Identity.Core.Test.Web.Service
 
             await _identityService.SetSecurityStampAsync(account, Guid.NewGuid().ToString(), cancellationToken);
 
-            var newAccountResult = await _usernaManager.CreateAsync(account, registrationRequest.Password);
+            var newAccountResult = await _userManager.CreateAsync(account, registrationRequest.Password);
 
             if (!newAccountResult.Succeeded)
             {
-                return null;
+                return new UserRegisterationResponse
+                {
+                    ErrorMessage = string.Join("; ", newAccountResult.Errors.Select(x=>x.Description))
+                };
             }
             
             if (newAccountResult.Succeeded)
@@ -71,7 +74,8 @@ namespace Verve.Identity.Core.Test.Web.Service
                     Id = account.Id,
                     UserName = account.UserName,
                     Email = account.Email,
-                    PhoneNo = account.PhoneNumber
+                    PhoneNo = account.PhoneNumber,
+                    Success = true
                 };
             }
 
@@ -80,7 +84,7 @@ namespace Verve.Identity.Core.Test.Web.Service
 
         public async Task<LoginResponse> LoginAsync(LoginRequest loginRequest)
         {
-            var userAccount = await _usernaManager.FindByNameAsync(loginRequest.Username);
+            var userAccount = await _userManager.FindByNameAsync(loginRequest.Username);
 
             if (userAccount == null)
             {
@@ -100,7 +104,7 @@ namespace Verve.Identity.Core.Test.Web.Service
             {
                 Email = userAccount.Email,
                 Username = userAccount.UserName,
-                Roles = await _usernaManager.GetRolesAsync(userAccount),
+                Roles = await _userManager.GetRolesAsync(userAccount),
             };
 
 
