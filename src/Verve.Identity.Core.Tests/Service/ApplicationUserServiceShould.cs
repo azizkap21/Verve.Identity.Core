@@ -98,7 +98,7 @@ namespace Verve.Identity.Core.Tests.Service
 
             Assert.Equal(roleId, dbRole.RoleId);
 
-            this._mockRepository.VerifyAll();
+            _mockRepository.VerifyAll();
         }
     }
 }
