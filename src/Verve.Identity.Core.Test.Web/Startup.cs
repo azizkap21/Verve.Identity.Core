@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +40,18 @@ namespace Verve.Identity.Core.Test.Web
 
             services.AddScoped<IUserService, UserService>();
             
-            services.AddVerveIdentityServices<TestApplicationDbContext, UserAccount, VerveRole>();
+            services.AddVerveIdentityServices<ApplicationUserService, TestApplicationDbContext, UserAccount, VerveRole>();
+
+            services.Configure<IdentityOptions>(o =>
+            {
+                o.User.RequireUniqueEmail = true;
+                o.Password.RequireUppercase = true;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireDigit = true;
+                o.Password.RequiredLength = 8;
+                o.Lockout.MaxFailedAccessAttempts = 5;
+                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromHours(1);
+            });
 
             ConfigureAuthentication(services);
         }

@@ -14,24 +14,38 @@ using System.Data.SqlClient;
 namespace Verve.Identity.Core.Service
 
 {
-    public class VerveIdentityService<TDbContext, TUser, TRole> : IVerveIdentityService<TUser>
+    /// <summary>
+    /// An abstract implementation of <see cref="IVerveIdentityService{TUser}"/>
+    /// </summary>
+    /// <typeparam name="TDbContext">
+    /// The type used to represent <see cref="VerveIdentityDbContext{TUser,TRole}"/>,
+    /// which should provide db sets for <typeparamref name="TUser"/> of type <see cref="VerveUserAccount"/> and <typeparamref name="TRole"/> of type <see cref="VerveRole"/>
+    /// </typeparam>
+    /// <typeparam name="TUser">The type used to represent <see cref="VerveUserAccount"/></typeparam>
+    /// <typeparam name="TRole">The type used to represent <see cref="VerveRole"/></typeparam>
+    public abstract class VerveIdentityService<TDbContext, TUser, TRole> : IVerveIdentityService<TUser>
         where TDbContext : VerveIdentityDbContext<TUser, TRole>
-        where TUser: VerveUserAccount
-        where TRole: VerveRole
+        where TUser : VerveUserAccount
+        where TRole : VerveRole
     {
-        private readonly IPasswordHasher<TUser> _passwordHasher;
         private readonly IVerveRoleStore<VerveRole> _roleStore;
         private readonly TDbContext _verveIdentityDbContext;
         private readonly IdentityErrorDescriber _identityErrorDescriber;
         private readonly ILogger _logger;
 
-        public VerveIdentityService(IPasswordHasher<TUser> passwordHasher,
-                            IVerveRoleStore<VerveRole> roleStore,
+        /// <summary>
+        /// Creates a new instance of <see cref="VerveIdentityService{TDbContext,TUser,TRole}"/>
+        /// </summary>
+        /// <param name="roleStore"></param>
+        /// <param name="verveIdentityDbContext"></param>
+        /// <param name="identityErrorDescriber"></param>
+        /// <param name="logger"></param>
+        public VerveIdentityService(IVerveRoleStore<VerveRole> roleStore,
                             TDbContext verveIdentityDbContext,
                             IdentityErrorDescriber identityErrorDescriber,
                             ILogger<VerveIdentityService<TDbContext, TUser, TRole>> logger)
         {
-            _passwordHasher = passwordHasher;
+
             _roleStore = roleStore;
             _verveIdentityDbContext = verveIdentityDbContext;
             _identityErrorDescriber = identityErrorDescriber;
@@ -40,22 +54,13 @@ namespace Verve.Identity.Core.Service
         }
 
         public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
-
-           => Task.FromResult(user.PasswordHash = passwordHash);
-
-
+            => Task.FromResult(user.PasswordHash = passwordHash);
 
         public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
-                => Task.FromResult(user.PasswordHash);
+            => Task.FromResult(user.PasswordHash);
 
         public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
-                => Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
-
-        public string HashPassword(TUser user, string password)
-                => _passwordHasher.HashPassword(user, password);
-
-        public PasswordVerificationResult VerifyHashedPassword(TUser user, string hashedPassword, string providedPassword)
-            => _passwordHasher.VerifyHashedPassword(user, hashedPassword, providedPassword);
+            => Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
 
         public Task SetSecurityStampAsync(TUser user, string stamp, CancellationToken cancellationToken)
             => Task.FromResult(user.SecurityStamp = stamp);
@@ -102,7 +107,7 @@ namespace Verve.Identity.Core.Service
             var userRoleIds = await _verveIdentityDbContext.UserRoleMappings.Where(x => x.UserId == user.Id)
                 .AsNoTracking()
                 .Select(x => x.RoleId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             if (userRoleIds.Contains(role.Id))
             {
@@ -122,7 +127,7 @@ namespace Verve.Identity.Core.Service
         public async Task RemoveFromRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
             var role = await _roleStore.FindByRoleNameAsync(roleName, cancellationToken);
-            var userRole = await _verveIdentityDbContext.UserRoleMappings.FirstOrDefaultAsync(x => x.UserId == user.Id && x.RoleId == role.Id);
+            var userRole = await _verveIdentityDbContext.UserRoleMappings.FirstOrDefaultAsync(x => x.UserId == user.Id && x.RoleId == role.Id, cancellationToken);
 
             if (userRole == null)
             {
@@ -136,38 +141,51 @@ namespace Verve.Identity.Core.Service
 
         public async Task<IList<string>> GetRolesAsync(TUser user, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException($"{nameof(GetRolesAsync)} is canceled");
+            }
+
             var userRoleIds = await _verveIdentityDbContext.UserRoleMappings.Where(x => x.UserId == user.Id)
                 .AsNoTracking()
                 .Select(x => x.RoleId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             var roleNames = await _verveIdentityDbContext.Roles.Where(r => userRoleIds.Contains(r.Id))
                 .AsNoTracking()
                 .Select(n => n.Name)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return roleNames;
         }
 
         public async Task<bool> IsInRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException($"{nameof(IsInRoleAsync)} is canceled");
+            }
             var role = await _roleStore.FindByRoleNameAsync(roleName, cancellationToken);
-            var userRole = await _verveIdentityDbContext.UserRoleMappings.FirstOrDefaultAsync(x => x.UserId == user.Id && x.RoleId == role.Id);
+            var userRole = await _verveIdentityDbContext.UserRoleMappings.FirstOrDefaultAsync(x => x.UserId == user.Id && x.RoleId == role.Id, cancellationToken);
 
             return userRole != null;
         }
 
         public async Task<IList<TUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                throw new OperationCanceledException($"{nameof(GetUsersInRoleAsync)} is canceled");
+            }
             var role = await _roleStore.FindByRoleNameAsync(roleName, cancellationToken);
             var userIds = await _verveIdentityDbContext.UserRoleMappings.Where(x => x.RoleId == role.Id)
                 .AsNoTracking()
                 .Select(x => x.UserId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return await _verveIdentityDbContext.UserAccounts.Where(x => userIds.Contains(x.Id))
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
         public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
@@ -193,7 +211,7 @@ namespace Verve.Identity.Core.Service
             {
                 _logger.LogWarning("User will not be created because this user name '{UserName}' already exists. Normalized User name '{NormalizedUserName}'", user.UserName, user.NormalizedUserName);
 
-                return IdentityResult.Failed(new IdentityError[] { _identityErrorDescriber.DuplicateUserName(user.UserName) });
+                return IdentityResult.Failed(_identityErrorDescriber.DuplicateUserName(user.UserName));
             }
             var existingUserByEmail = await FindByEmailAsync(user.NormalizedEmail, cancellationToken);
 
@@ -201,25 +219,19 @@ namespace Verve.Identity.Core.Service
             {
                 _logger.LogWarning("User can be created because this email '{Email}' already exists. Normalized email '{NormalizedEmail}'", user.NormalizedEmail, user.Email);
 
-                return IdentityResult.Failed(new IdentityError[] { _identityErrorDescriber.DuplicateEmail(user.Email) });
+                return IdentityResult.Failed(_identityErrorDescriber.DuplicateEmail(user.Email));
             }
 
             try
             {
                 _verveIdentityDbContext.UserAccounts.Attach(user);
                 _verveIdentityDbContext.Entry(user).State = EntityState.Added;
-
-
+                
                 await _verveIdentityDbContext.SaveChangesAsync(cancellationToken);
             }
             catch (SqlException sqlEx)
             {
                 throw new Exception(sqlEx.Message);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
             }
 
             await AddToRoleAsync(user, "User", cancellationToken);
@@ -237,7 +249,7 @@ namespace Verve.Identity.Core.Service
             {
                 _logger.LogWarning("User can not be updated because this user name '{UserName}' already exists. Normalized User name '{NormalizedUserName}'", user.UserName, user.NormalizedUserName);
 
-                return IdentityResult.Failed(new IdentityError[] { _identityErrorDescriber.DuplicateUserName(user.UserName) });
+                return IdentityResult.Failed(_identityErrorDescriber.DuplicateUserName(user.UserName));
             }
             var existingUserByEmail = await FindByEmailAsync(user.NormalizedEmail, cancellationToken);
 
@@ -245,7 +257,7 @@ namespace Verve.Identity.Core.Service
             {
                 _logger.LogWarning("User can not be updated because this email '{Email}' already exists. Normalized email '{NormalizedEmail}'", user.NormalizedEmail, user.Email);
 
-                return IdentityResult.Failed(new IdentityError[] { _identityErrorDescriber.DuplicateEmail(user.Email) });
+                return IdentityResult.Failed(_identityErrorDescriber.DuplicateEmail(user.Email));
             }
 
             _verveIdentityDbContext.Update(user);
@@ -260,7 +272,7 @@ namespace Verve.Identity.Core.Service
 
         public async Task<IdentityResult> DeleteAsync(TUser user, CancellationToken cancellationToken)
         {
-            var entry = _verveIdentityDbContext.UserAccounts.Remove(user);
+            _verveIdentityDbContext.UserAccounts.Remove(user);
             await _verveIdentityDbContext.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("User with id '{Id}', user name '{UserName}' and email '{Email}' has been deleted", user.Id, user.UserName, user.Email);
 
@@ -274,7 +286,7 @@ namespace Verve.Identity.Core.Service
             : throw new Exception("User Id is not in correct format. Required Guid.");
 
         public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
-            => _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(x => x.NormalizedUserName == normalizedUserName);
+            => _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(x => x.NormalizedUserName == normalizedUserName, cancellationToken);
 
         public void Dispose()
         {
@@ -294,7 +306,7 @@ namespace Verve.Identity.Core.Service
             => Task.FromResult(user.EmailConfirmed);
 
         public Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
-            => _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(e => e.NormalizedEmail == normalizedEmail);
+            => _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(e => e.NormalizedEmail == normalizedEmail, cancellationToken);
 
         public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.NormalizedEmail);

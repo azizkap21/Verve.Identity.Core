@@ -6,7 +6,6 @@ namespace Verve.Identity.Core.Service.Abstraction
 {
     public interface IVerveIdentityService<TUser> : IUserStore<TUser>,
                                     IUserPasswordStore<TUser>,
-                                    IPasswordHasher<TUser>,
                                     IUserSecurityStampStore<TUser>,
                                     IUserEmailStore<TUser>,
                                     IUserPhoneNumberStore<TUser>,
