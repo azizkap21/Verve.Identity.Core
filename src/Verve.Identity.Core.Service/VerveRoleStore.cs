@@ -18,8 +18,7 @@ namespace Verve.Identity.Core.Service
         private readonly TDbContext _verveIdentityDbContext;
         private readonly IdentityErrorDescriber _identityErrorDescriber;
         private readonly ILogger<VerveRoleStore<TDbContext, TUser, TRole>> _logger;
-        private bool disposed = false;
-
+        
         public VerveRoleStore(TDbContext verveIdentityDbContext,
                     IdentityErrorDescriber identityErrorDescriber,
                     ILogger<VerveRoleStore<TDbContext, TUser, TRole>> logger)
