@@ -104,7 +104,5 @@ namespace Verve.Identity.Core.Service
         {
            
         }
-
-       
     }
 }

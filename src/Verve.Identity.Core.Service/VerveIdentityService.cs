@@ -104,6 +104,22 @@ namespace Verve.Identity.Core.Service
         public async Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
         {
             var role = await _roleStore.FindByRoleNameAsync(roleName, cancellationToken);
+            if (role == null)
+            {
+                var result = await _roleStore.CreateAsync(new VerveRole
+                {
+                    Name = roleName,
+                    NormalizedName = roleName.NormalizedString(),
+
+                }, cancellationToken);
+
+                if (result != IdentityResult.Success)
+                {
+                    throw new Exception("Not able to create 'User' Role");
+                }
+
+                role = await _roleStore.FindByRoleNameAsync(roleName, cancellationToken);
+            }
             var userRoleIds = await _verveIdentityDbContext.UserRoleMappings.Where(x => x.UserId == user.Id)
                 .AsNoTracking()
                 .Select(x => x.RoleId)
@@ -226,7 +242,7 @@ namespace Verve.Identity.Core.Service
             {
                 _verveIdentityDbContext.UserAccounts.Attach(user);
                 _verveIdentityDbContext.Entry(user).State = EntityState.Added;
-                
+
                 await _verveIdentityDbContext.SaveChangesAsync(cancellationToken);
             }
             catch (SqlException sqlEx)
