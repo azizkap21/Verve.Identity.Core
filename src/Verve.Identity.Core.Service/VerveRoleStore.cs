@@ -30,7 +30,7 @@ namespace Verve.Identity.Core.Service
 
         public async Task<IdentityResult> CreateAsync(TRole role, CancellationToken cancellationToken)
         {
-            var existingRole = await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(x => x.NormalizedName == role.NormalizedName);
+            var existingRole = await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(x => x.NormalizedName == role.NormalizedName, cancellationToken);
             if (existingRole != null)
             {
                 _logger.LogWarning("Attempting to add new role with the normalized role name: '{NormalizedRoleName}' already exists in db.", role.NormalizedName);
@@ -47,7 +47,7 @@ namespace Verve.Identity.Core.Service
 
         public async Task<IdentityResult> UpdateAsync(TRole role, CancellationToken cancellationToken)
         {
-            var existingRole = await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(x => x.NormalizedName == role.NormalizedName);
+            var existingRole = await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(x => x.NormalizedName == role.NormalizedName, cancellationToken);
 
             if (existingRole != null && existingRole.Id != role.Id)
             {
@@ -88,7 +88,7 @@ namespace Verve.Identity.Core.Service
 
         public async Task<TRole> FindByIdAsync(string roleId, CancellationToken cancellationToken)
             => Guid.TryParse(roleId, out var id)
-                    ? await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(r => r.Id == id)
+                    ? await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(r => r.Id == id, cancellationToken)
                     : throw (new Exception($"{roleId} is not a Guid"));
         public async Task<TRole> FindByRoleNameAsync(string roleName, CancellationToken cancellationToken)
         {
@@ -96,7 +96,7 @@ namespace Verve.Identity.Core.Service
             return await FindByNameAsync(normalizedRoleName, cancellationToken);
         }
         public async Task<TRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
-            => await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName);
+            => await _verveIdentityDbContext.Roles.FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, cancellationToken);
 
       
         public void Dispose()
