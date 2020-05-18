@@ -11,8 +11,9 @@
     <RepositoryType>Public</RepositoryType>
     <PackageTags>Identity, AspNetCoreIdentity, DbContext</PackageTags>
     <Description>Custom Implementation of Microsoft AspNet Core Identity Sql Server Db Context</Description>
-    <PackageReleaseNotes>Intial release</PackageReleaseNotes>
+    <PackageReleaseNotes>Removed sample project from this repository and created separate repository</PackageReleaseNotes>
     <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/verveinfotech/Verve.Identity.Core</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
