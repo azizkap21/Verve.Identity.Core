@@ -40,7 +40,7 @@ namespace Verve.Identity.Core.Service
         /// <param name="verveIdentityDbContext"></param>
         /// <param name="identityErrorDescriber"></param>
         /// <param name="logger"></param>
-        public VerveIdentityService(IVerveRoleStore<VerveRole> roleStore,
+        protected VerveIdentityService(IVerveRoleStore<VerveRole> roleStore,
                             TDbContext verveIdentityDbContext,
                             IdentityErrorDescriber identityErrorDescriber,
                             ILogger<VerveIdentityService<TDbContext, TUser, TRole>> logger)
@@ -53,52 +53,52 @@ namespace Verve.Identity.Core.Service
             _logger = logger;
         }
 
-        public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
+        public virtual Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
             => Task.FromResult(user.PasswordHash = passwordHash);
 
-        public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.PasswordHash);
 
-        public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(!string.IsNullOrEmpty(user.PasswordHash));
 
-        public Task SetSecurityStampAsync(TUser user, string stamp, CancellationToken cancellationToken)
+        public virtual Task SetSecurityStampAsync(TUser user, string stamp, CancellationToken cancellationToken)
             => Task.FromResult(user.SecurityStamp = stamp);
 
-        public Task<string> GetSecurityStampAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetSecurityStampAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.SecurityStamp);
 
-        public Task SetPhoneNumberAsync(TUser user, string phoneNumber, CancellationToken cancellationToken)
+        public virtual Task SetPhoneNumberAsync(TUser user, string phoneNumber, CancellationToken cancellationToken)
             => Task.FromResult(user.PhoneNumber = phoneNumber);
 
-        public Task<string> GetPhoneNumberAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetPhoneNumberAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.PhoneNumber);
 
-        public Task<bool> GetPhoneNumberConfirmedAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<bool> GetPhoneNumberConfirmedAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.PhoneNumberConfirmed);
 
-        public Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
+        public virtual Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
             => Task.FromResult(user.PhoneNumberConfirmed = confirmed);
 
-        public Task<DateTimeOffset?> GetLockoutEndDateAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<DateTimeOffset?> GetLockoutEndDateAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.LockoutEnd);
 
-        public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
+        public virtual Task SetLockoutEndDateAsync(TUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
             => Task.FromResult(user.LockoutEnd = lockoutEnd);
 
-        public Task<int> IncrementAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<int> IncrementAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.AccessFailedCount++);
 
-        public Task ResetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task ResetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.AccessFailedCount = 0);
 
-        public Task<int> GetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<int> GetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.AccessFailedCount);
 
-        public Task<bool> GetLockoutEnabledAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<bool> GetLockoutEnabledAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.LockoutEnabled);
 
-        public Task SetLockoutEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
+        public virtual Task SetLockoutEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
             => Task.FromResult(user.LockoutEnabled = true);
 
         public async Task AddToRoleAsync(TUser user, string roleName, CancellationToken cancellationToken)
@@ -204,19 +204,19 @@ namespace Verve.Identity.Core.Service
                 .ToListAsync(cancellationToken);
         }
 
-        public Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetUserIdAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.Id.ToString());
 
-        public Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetUserNameAsync(TUser user, CancellationToken cancellationToken)
            => Task.FromResult(user.UserName);
 
-        public Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
+        public virtual Task SetUserNameAsync(TUser user, string userName, CancellationToken cancellationToken)
             => Task.FromResult(user.UserName = userName);
 
-        public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.NormalizedUserName);
 
-        public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
+        public virtual Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
             => Task.FromResult(user.NormalizedUserName = normalizedName);
 
         public virtual async Task<IdentityResult> CreateAsync(TUser user, CancellationToken cancellationToken)
@@ -296,12 +296,12 @@ namespace Verve.Identity.Core.Service
 
         }
 
-        public Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public virtual Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
             => Guid.TryParse(userId, out var id)
             ? _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(x => x.Id == id, cancellationToken)
             : throw new Exception("User Id is not in correct format. Required Guid.");
 
-        public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public virtual Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
             => _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(x => x.NormalizedUserName == normalizedUserName, cancellationToken);
 
         public void Dispose()
@@ -309,25 +309,25 @@ namespace Verve.Identity.Core.Service
 
         }
 
-        public Task SetEmailAsync(TUser user, string email, CancellationToken cancellationToken)
+        public virtual Task SetEmailAsync(TUser user, string email, CancellationToken cancellationToken)
             => Task.FromResult(user.Email = email);
 
-        public Task<string> GetEmailAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetEmailAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.Email);
 
-        public Task<bool> GetEmailConfirmedAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<bool> GetEmailConfirmedAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.EmailConfirmed);
 
-        public Task SetEmailConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
+        public virtual Task SetEmailConfirmedAsync(TUser user, bool confirmed, CancellationToken cancellationToken)
             => Task.FromResult(user.EmailConfirmed);
 
-        public Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
+        public virtual Task<TUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
             => _verveIdentityDbContext.UserAccounts.FirstOrDefaultAsync(e => e.NormalizedEmail == normalizedEmail, cancellationToken);
 
-        public Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
+        public virtual Task<string> GetNormalizedEmailAsync(TUser user, CancellationToken cancellationToken)
             => Task.FromResult(user.NormalizedEmail);
 
-        public Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
+        public virtual Task SetNormalizedEmailAsync(TUser user, string normalizedEmail, CancellationToken cancellationToken)
             => Task.FromResult(user.NormalizedEmail = normalizedEmail);
     }
 }
