@@ -247,7 +247,8 @@ namespace Verve.Identity.Core.Service
             }
             catch (SqlException sqlEx)
             {
-                throw new Exception(sqlEx.Message);
+                _logger.LogError(sqlEx,"An Error occurred while trying to create new user {UserId}, {UserName}", user.Id, user.Email);
+                return IdentityResult.Failed(new IdentityError() { Code = "SQL_Error", Description = sqlEx.Message });
             }
 
             await AddToRoleAsync(user, "User", cancellationToken);
@@ -272,14 +273,23 @@ namespace Verve.Identity.Core.Service
             if (existingUserByName != null && existingUserByEmail.Id != user.Id)
             {
                 _logger.LogWarning("User can not be updated because this email '{Email}' already exists. Normalized email '{NormalizedEmail}'", user.NormalizedEmail, user.Email);
-
                 return IdentityResult.Failed(_identityErrorDescriber.DuplicateEmail(user.Email));
             }
 
-            _verveIdentityDbContext.Update(user);
-            _verveIdentityDbContext.Entry(user).State = EntityState.Modified;
+            try
+            {
+                _verveIdentityDbContext.Update(user);
+                _verveIdentityDbContext.Entry(user).State = EntityState.Modified;
 
-            await _verveIdentityDbContext.SaveChangesAsync(cancellationToken);
+                await _verveIdentityDbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError(ex,"An Error occurred while trying to update user {UserId}, {UserName}", user.Id, user.Email);
+
+                return IdentityResult.Failed(new IdentityError() { Code = "SQL_Error", Description = ex.Message });
+            }
+            
 
             _logger.LogInformation("User updated with id '{Id}', user name '{UserName}' and email '{Email}'", user.Id, user.UserName, user.Email);
 
