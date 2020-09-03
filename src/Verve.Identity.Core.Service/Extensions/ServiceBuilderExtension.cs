@@ -33,10 +33,10 @@ namespace Verve.Identity.Core.Service.Extensions
         /// <param name="services">IServiceCollection services</param>
         /// <returns>IServiceCollection services</returns>
         public static IServiceCollection AddVerveIdentityServices<TIdentityImpl, TDbContext, TUser, TRole>(this IServiceCollection services)
-            where TIdentityImpl: VerveIdentityService<TDbContext, TUser, TRole>
+            where TIdentityImpl : VerveIdentityService<TDbContext, TUser, TRole>
             where TUser : VerveUserAccount
-            where TRole : VerveRole
-            where TDbContext: VerveIdentityDbContext<TUser, TRole>
+            where TRole : VerveRole, new()
+            where TDbContext : VerveIdentityDbContext<TUser, TRole>
 
         {
             services.AddScoped<ILookupNormalizer, NormolizationHandler>();

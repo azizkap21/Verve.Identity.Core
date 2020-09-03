@@ -26,9 +26,9 @@ namespace Verve.Identity.Core.Service
     public abstract class VerveIdentityService<TDbContext, TUser, TRole> : IVerveIdentityService<TUser>
         where TDbContext : VerveIdentityDbContext<TUser, TRole>
         where TUser : VerveUserAccount
-        where TRole : VerveRole
+        where TRole : VerveRole, new()
     {
-        private readonly IVerveRoleStore<VerveRole> _roleStore;
+        private readonly IVerveRoleStore<TRole> _roleStore;
         private readonly TDbContext _verveIdentityDbContext;
         private readonly IdentityErrorDescriber _identityErrorDescriber;
         private readonly ILogger _logger;
@@ -40,7 +40,7 @@ namespace Verve.Identity.Core.Service
         /// <param name="verveIdentityDbContext"></param>
         /// <param name="identityErrorDescriber"></param>
         /// <param name="logger"></param>
-        protected VerveIdentityService(IVerveRoleStore<VerveRole> roleStore,
+        protected VerveIdentityService(IVerveRoleStore<TRole> roleStore,
                             TDbContext verveIdentityDbContext,
                             IdentityErrorDescriber identityErrorDescriber,
                             ILogger<VerveIdentityService<TDbContext, TUser, TRole>> logger)
@@ -106,7 +106,7 @@ namespace Verve.Identity.Core.Service
             var role = await _roleStore.FindByRoleNameAsync(roleName, cancellationToken);
             if (role == null)
             {
-                var result = await _roleStore.CreateAsync(new VerveRole
+                var result = await _roleStore.CreateAsync(new TRole()
                 {
                     Name = roleName,
                     NormalizedName = roleName.NormalizedString(),
