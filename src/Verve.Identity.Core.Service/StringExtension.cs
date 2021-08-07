@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Verve.Identity.Core.Service
@@ -15,10 +16,7 @@ namespace Verve.Identity.Core.Service
                 return string.Empty;
             }
 
-            if (overrides == null)
-            {
-                overrides = string.Empty;
-            }
+            overrides ??= string.Empty;
 
             var retString = textToNormalize.ToUpper().Replace(" ", string.Empty);
             return string.Concat(GetCharsAndNumbers(retString, overrides));
@@ -26,16 +24,10 @@ namespace Verve.Identity.Core.Service
 
         private static IEnumerable<char> GetCharsAndNumbers(string retString, string overrides)
         {
-            foreach (char ch in retString.ToCharArray())
-            {
-                if (IsNumberOrAlphabet(ch) || overrides.Contains(ch))
-                {
-                    yield return ch;
-                }
-            }
+            return retString.Where(ch => IsAlphaNumeric(ch) || overrides.Contains(ch));
         }
 
-        private static bool IsNumberOrAlphabet(char ch)
+        private static bool IsAlphaNumeric(char ch)
         {
             return AlphaNumeric.Contains(ch.ToString());
         }
