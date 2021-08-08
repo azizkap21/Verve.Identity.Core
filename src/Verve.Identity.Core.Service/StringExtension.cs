@@ -1,7 +1,5 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Verve.Identity.Core.Service
 {
@@ -9,7 +7,7 @@ namespace Verve.Identity.Core.Service
     {
         private const string AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-        public static string NormalizedString(this string textToNormalize, string overrides=null)
+        public static string NormalizedString(this string textToNormalize, string overrides = null)
         {
             if (string.IsNullOrEmpty(textToNormalize))
             {
