@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.Model",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verve.Identity.Core.IdentityContext", "Verve.Identity.Core.IdentityContext\Verve.Identity.Core.IdentityContext.csproj", "{66C2A0EE-936B-4036-8049-5CB3BA13B4CA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BB07A4F4-A360-4AEE-BD1C-1937CDDF3537}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verve.Identity.Core.Tests", "Verve.Identity.Core.Tests\Verve.Identity.Core.Tests.csproj", "{A39336C2-1D3E-4755-B43D-34F9581FD0FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +31,16 @@ Global
 		{66C2A0EE-936B-4036-8049-5CB3BA13B4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66C2A0EE-936B-4036-8049-5CB3BA13B4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66C2A0EE-936B-4036-8049-5CB3BA13B4CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A39336C2-1D3E-4755-B43D-34F9581FD0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39336C2-1D3E-4755-B43D-34F9581FD0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39336C2-1D3E-4755-B43D-34F9581FD0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39336C2-1D3E-4755-B43D-34F9581FD0FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A39336C2-1D3E-4755-B43D-34F9581FD0FA} = {BB07A4F4-A360-4AEE-BD1C-1937CDDF3537}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2DF9F92-A0CA-4FDB-AA1F-835260926914}
