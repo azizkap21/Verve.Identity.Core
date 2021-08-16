@@ -2,22 +2,20 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.0.1</version>
+    <version>2.0.0.1</version>
     <title>Verve.Identity.Core.Service</title>
-    <authors>Verve IT</authors>
+    <authors>Verve IT; Aziz Kapadia</authors>
     <owners>Verve IT</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <projectUrl>http://project_url_here_or_delete_this_line/</projectUrl>
-    <iconUrl>http://icon_url_here_or_delete_this_line/</iconUrl>
+    <projectUrl>https://github.com/verveinfotech/Verve.Identity.Core</projectUrl>
     <description>Verve Identity Core Service</description>
     <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
     <copyright>Copyright 2020</copyright>
     <tags>Identity</tags>
-	<dependencies>
-    <dependency id="Verve.Identity.Core.Context" version="1.0.0" include="contentFiles, build" />
-    <dependency id="Verve.Identity.Core.Model" version="1.0.0" include="contentFiles, build" />
-</dependencies>
-
+    <dependencies>
+      <dependency id="Verve.Identity.Core.Context" version="2.0.0.1" include="contentFiles, build" />
+      <dependency id="Verve.Identity.Core.Model" version="2.0.0.1" include="contentFiles, build" />
+    </dependencies>
   </metadata>
 </package>

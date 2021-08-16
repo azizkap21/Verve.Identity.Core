@@ -5,13 +5,9 @@ namespace Verve.Identity.Core.Service
     public class NormolizationHandler : ILookupNormalizer
     {
         public string NormalizeName(string name)
-        {
-            return name.NormalizedString();
-        }
-
+            => name.NormalizedString();
+        
         public string NormalizeEmail(string email)
-        {
-            return email.NormalizedString("@");
-        }
+            => email.NormalizedString("@");
     }
 }

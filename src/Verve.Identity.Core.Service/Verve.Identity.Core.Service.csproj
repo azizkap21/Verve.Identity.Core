@@ -1,23 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>Latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.0.1</Version>
-    <Authors>Verve Infotech</Authors>
+    <Version>2.0.0.1</Version>
+    <Authors>Verve Infotech; Aziz Kapadia</Authors>
     <Company>Verve Infotech</Company>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Public</RepositoryType>
-    <PackageTags>Identity, AspNetCoreIdentity, DbContext</PackageTags>
+    <PackageTags>Identity, AspNetCoreIdentity, DbContext, .NET5</PackageTags>
     <Description>Custom Implementation of Microsoft AspNet Core Identity Service to use UserManager</Description>
-    <PackageReleaseNotes>Removed sample project from this repository and created separate repository</PackageReleaseNotes>
+    <PackageReleaseNotes>Upgrading to .NET 5.0</PackageReleaseNotes>
     <IsPackable>true</IsPackable>
     <RepositoryUrl>https://github.com/verveinfotech/Verve.Identity.Core</RepositoryUrl>
+    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.8" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
