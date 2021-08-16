@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Verve.Identity.Core.Service
 {
+    /// <summary>
+    /// Contains String extension methods
+    /// </summary>
     public static class StringExtension
     {
         private const string AlphaNumeric = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
